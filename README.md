@@ -12,6 +12,8 @@ QiitaはじめてのDjango練習用リポジトリ
 
 その5: https://qiita.com/j54854/items/d4fff4f71e7d9a0d136a
 
+→ superのあたりの理解が不足
+
 その6: https://qiita.com/j54854/items/b25a85ddf41b6d8ffab6
 
 その7: https://qiita.com/j54854/items/1f0560142e39d888251c
