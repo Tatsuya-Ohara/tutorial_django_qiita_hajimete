@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
 
+from .forms import *
 from .models import Question
 
 def index(request):
@@ -15,21 +16,39 @@ def index(request):
 
 def detail(request, question_id):
     '''詳細ページ''' 
-    # get_object_or_404を使ったショートカットバージョン
     question = get_object_or_404(Question, pk=question_id)
-    choice_list = question.choice_set.all()
-    context = {'question': question, 'choice_list': choice_list}
-    return render(request, 'polls/detail.html', context)
     
-    # Http404を使った少し長いバージョン
-    try:
-        question = Question.objects.get(pk=question_id)
-    except Question.DoesNotExist:
-        # 404エラーを送出
-        raise Http404("Question does not exist")
-    choice_list = question.choice_set.all()
-    context = {'question': question, 'choice_list': choice_list}
-    return render(request, 'polls/detail.html', context)
+    # ユーザーからのリクエストがPOST
+    if request.method == 'POST':
+        # リクエストを渡してformオブジェクトを作成
+        form = VoteForm(request.POST, question=question)
+        if form.is_valid():
+            form.save()
+            # 正常終了したらredirectが推奨
+            return redirect('polls:results', question_id=question.id)
+    else:
+        # 空のフォームインスタンスを作成
+        form = VoteForm(question=question)
+    
+    context = {'question':question, 'form':form}
+    return render(request, "polls/detail.html", context)
+    
+    
+    # # get_object_or_404を使ったショートカットバージョン
+    # question = get_object_or_404(Question, pk=question_id)
+    # choice_list = question.choice_set.all()
+    # context = {'question': question, 'choice_list': choice_list}
+    # return render(request, 'polls/detail.html', context)
+    
+    # # Http404を使った少し長いバージョン
+    # try:
+    #     question = Question.objects.get(pk=question_id)
+    # except Question.DoesNotExist:
+    #     # 404エラーを送出
+    #     raise Http404("Question does not exist")
+    # choice_list = question.choice_set.all()
+    # context = {'question': question, 'choice_list': choice_list}
+    # return render(request, 'polls/detail.html', context)
     
     # # 質問のクエリセットを全て取得する
     # questions = Question.objects.all()

@@ -1,7 +1,17 @@
 <h1>{{ question.question_text }}</h1>
-<ul>
-    <!-- templateでsetを呼ぶときは()が不要であることに注意。この場合はcontextとしてchoice_listが不要 -->
-    {% for choice in choice_list %}
-        <li>{{ choice.choice_text }}</li>
-    {% endfor %}
-</ul>
+{{ form.non_field_errors }}
+<form action="{% url 'polls:detail' question.id %}" method="post">
+<!-- クロスリクエストフォージェリ対策 -->
+{% csrf_token %}
+<p>
+    {{ from.your_choice.label }}<br>
+    {{ form.your_choice }}
+</p>
+<p>
+    {{ form.new_option.label }}<br>
+    {{ form.new_option }}
+</p>
+<!-- contextから受け取ったformが挿入される。as_pで<p>タグで囲われる。 -->
+
+<input type="submit" value="Vote">
+</form>
