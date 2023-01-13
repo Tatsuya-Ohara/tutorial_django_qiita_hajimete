@@ -1,9 +1,7 @@
-<h1>Question #{{ question_id }}</h1>
+<h1>{{ question.question_text }}</h1>
 <ul>
-    <li>
-        <!-- app_name / name / 引数 -->
-        <a href="{% url 'polls:results' question_id %}">
-            results vol.{{ question_id }}
-        </a>
-    </li>
+    <!-- templateでsetを呼ぶときは()が不要であることに注意。この場合はcontextとしてchoice_listが不要 -->
+    {% for choice in choice_list %}
+        <li>{{ choice.choice_text }}</li>
+    {% endfor %}
 </ul>
