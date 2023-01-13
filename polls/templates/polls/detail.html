@@ -1,0 +1,9 @@
+<h1>Question #{{ question_id }}</h1>
+<ul>
+    <li>
+        <!-- app_name / name / 引数 -->
+        <a href="{% url 'polls:results' question_id %}">
+            results vol.{{ question_id }}
+        </a>
+    </li>
+</ul>
