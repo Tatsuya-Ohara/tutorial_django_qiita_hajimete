@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
 
@@ -14,8 +15,10 @@ def index(request):
     # # 戻り値はHttpResponse形式になっている
     # return HttpResponse('Hello, World!!')
 
+@login_required
 def detail(request, question_id):
-    '''詳細ページ''' 
+    '''詳細ページ'''
+    user = request.user 
     question = get_object_or_404(Question, pk=question_id)
     
     # ユーザーからのリクエストがPOST
@@ -30,7 +33,7 @@ def detail(request, question_id):
         # 空のフォームインスタンスを作成
         form = VoteForm(question=question)
     
-    context = {'question':question, 'form':form}
+    context = {'user': user, 'question': question, 'form': form}
     return render(request, "polls/detail.html", context)
     
     
@@ -72,3 +75,16 @@ def results(request, question_id):
     return render(request, 'polls/results.html', {'question': question})
     # response = "You are looking at the results of question %s."
     # return HttpResponse(response % question_id)
+
+def signup(request):
+    '''froms.pyのSignUpFromを処理する'''
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('polls:index')
+    else:
+        form = SignUpForm()
+
+    context = {'form':form}
+    return render(request, 'polls/signup.html', context)

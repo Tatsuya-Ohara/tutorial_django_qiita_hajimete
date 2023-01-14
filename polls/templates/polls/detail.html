@@ -1,4 +1,4 @@
-<h1>{{ question.question_text }}</h1>
+<h1>Hi, {{ user|title }}! {{ question.question_text }}</h1>
 {{ form.non_field_errors }}
 <form action="{% url 'polls:detail' question.id %}" method="post">
 <!-- クロスリクエストフォージェリ対策 -->
